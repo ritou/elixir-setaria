@@ -5,8 +5,14 @@ defmodule Setaria.Mixfile do
     [app: :setaria,
      version: "0.1.0",
      elixir: "~> 1.3",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
+     # build_embedded: Mix.env == :prod,
+     # start_permanent: Mix.env == :prod,
+     description: "Setaria is OATH One Time Passwords Library for Elixir.",
+     package: [
+       maintainers: ["Your Name"],
+       licenses: ["MIT"],
+       links: %{"GitHub" => "https://github.com/ritou/elixir-setaria"}
+     ],
      deps: deps()]
   end
 
@@ -27,6 +33,9 @@ defmodule Setaria.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:pot, "~>0.9.5"}]
+    [
+      {:pot, "~>0.9.5"},
+      {:ex_doc, "~> 0.10", only: :dev}
+    ]
   end
 end

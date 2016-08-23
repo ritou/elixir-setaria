@@ -1,4 +1,13 @@
 defmodule Setaria do
+  @moduledoc """
+
+  ## Setaria
+
+  Setaria is OATH One Time Passwords Library for Elixir.  
+  This is wrapper of [POT](https://hex.pm/packages/pot).
+
+
+  """
 
   @default_timestep 30
 

@@ -31,7 +31,6 @@ defmodule SetariaTest do
 
   test "totp" do
     timestamp = 1332083784
-    timestep = 30
     secret = "1234567890"
     encoded_secret = Base.encode32(secret, padding: false)
     invalid_secret = "1234567891"
@@ -42,14 +41,10 @@ defmodule SetariaTest do
     # create 
     assert Setaria.totp(encoded_secret, timestamp) == expected_token
     assert Setaria.totp(secret, timestamp, encoded_secret: false) == expected_token
-    assert Setaria.totp(encoded_secret, timestamp, timestep) == expected_token
-    assert Setaria.totp(secret, timestamp, timestep, encoded_secret: false) == expected_token
 
     # valide succes
     assert Setaria.valid_totp(expected_token, encoded_secret, timestamp) == true
     assert Setaria.valid_totp(expected_token, secret, timestamp, encoded_secret: false) == true
-    assert Setaria.valid_totp(expected_token, encoded_secret, timestamp, timestep) == true
-    assert Setaria.valid_totp(expected_token, secret, timestamp, timestep, encoded_secret: false) == true
 
     # validate error
     ## token
@@ -61,12 +56,8 @@ defmodule SetariaTest do
     assert Setaria.valid_totp(expected_token, invalid_secret, timestamp, encoded_secret: false) == false
 
     ## timestamp
-    assert Setaria.valid_totp(expected_token, encoded_secret, timestamp + timestep) == false
-    assert Setaria.valid_totp(expected_token, secret, timestamp + timestep, encoded_secret: false) == false
-
-    ## timestep
-    assert Setaria.valid_totp(expected_token, encoded_secret, timestamp, timestep * 2) == false
-    assert Setaria.valid_totp(expected_token, secret, timestamp, timestep * 2, encoded_secret: false) == false
+    assert Setaria.valid_totp(expected_token, encoded_secret, timestamp + 30) == false
+    assert Setaria.valid_totp(expected_token, secret, timestamp + 30, encoded_secret: false) == false
 
     # current timestamp
     assert Setaria.totp(encoded_secret) != expected_token

@@ -59,7 +59,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
     totp = Setaria.totp(secret, timestamp, encoded_secret: false)
     ```
 
-  * validate hotp
+  * validate totp
 
     ```elixir
     # base32encoded secret

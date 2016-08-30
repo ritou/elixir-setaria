@@ -9,7 +9,7 @@ defmodule Setaria.Mixfile do
      # start_permanent: Mix.env == :prod,
      description: "Setaria is OATH One Time Passwords Library for Elixir.",
      package: [
-       maintainers: ["Your Name"],
+       maintainers: ["Ryo Ito"],
        licenses: ["MIT"],
        links: %{"GitHub" => "https://github.com/ritou/elixir-setaria"}
      ],

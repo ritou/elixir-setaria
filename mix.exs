@@ -4,7 +4,7 @@ defmodule Setaria.Mixfile do
   def project do
     [app: :setaria,
      version: "0.2.0",
-     elixir: "~> 1.2",
+     elixir: "~> 1.3",
      # build_embedded: Mix.env == :prod,
      # start_permanent: Mix.env == :prod,
      description: "Setaria is OATH One Time Passwords Library for Elixir.",

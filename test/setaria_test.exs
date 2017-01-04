@@ -67,4 +67,8 @@ defmodule SetariaTest do
     assert Setaria.valid_totp(expected_token, encoded_secret, [timestamp: timestamp + 30]) == false
     assert Setaria.valid_totp(expected_token, secret, [timestamp: timestamp + 30, encoded_secret: false]) == false
   end
+
+  test "force failed" do
+    assert true == false
+  end
 end

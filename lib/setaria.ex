@@ -11,118 +11,81 @@ defmodule Setaria do
 
   @default_timestep 30
 
-  # hotp
+  # hotp creation
   @doc """
-  Create HOTP with base32 encoded secret and counter.
-  """
-  @spec hotp(String.t, Integer.t) :: String.t
-  def hotp(encoded_secret, counter) do
-    :pot.hotp(encoded_secret, counter)
-  end
+  Create HOTP with secret and counter
 
-  @doc """
-  Create HOTP with raw secret and counter.
+  * opts
+   * `encoded_secret: false` : secret is not base32 encoded.
   """
-  @spec hotp(String.t, Integer.t, Keyword.t) :: String.t
-  def hotp(raw_secret, counter, encoded_secret: false) do
-    encoded_secret = Base.encode32(raw_secret, padding: false)
-    hotp(encoded_secret,counter)
+  @spec hotp(secret :: String.t, counter :: Integer.t, opts :: Keyword.t) :: String.t
+  def hotp(secret, counter, opts \\ []) do
+    encoded_secret = get_encoded_secret(secret, opts)
+    :pot.hotp(encoded_secret, counter)
   end
 
   # hotp validation
   @doc """
-  Validate HOTP with base32 encoded secret and counter.
+  Validate HOTP with secret and counter.
+
+  * opts
+   * `encoded_secret: false` : secret is not base32 encoded.
   """
-  @spec valid_hotp(String.t, String.t, Integer.t) :: boolean
-  def valid_hotp(token, encoded_secret, counter) do
+  @spec valid_hotp(token :: String.t, secret :: String.t, counter :: Integer.t, opts :: Keyword.t) :: boolean
+  def valid_hotp(token, secret, counter, opts \\ []) do
+    encoded_secret = get_encoded_secret(secret, opts)
     :pot.valid_hotp(token, encoded_secret, [{:last, counter - 1}]) == counter
   end
 
+  # totp creation
   @doc """
-  Validate HOTP with raw secret and counter.
-  """
-  @spec valid_hotp(String.t, String.t, Integer.t, Keyword.t) :: boolean
-  def valid_hotp(token, raw_secret, counter, encoded_secret: false) do
-    encoded_secret = Base.encode32(raw_secret, padding: false)
-    valid_hotp(token, encoded_secret, counter)
-  end
+  Create TOTP with secret.
 
-  # totp
-  @doc """
-  Create TOTP with base32 encoded secret and current timestamp.
+  * opts
+   * `encoded_secret: false` : secret is not base32 encoded.
+   * `timestamp` : timestamp
   """
-  @spec totp(String.t) :: String.t
-  def totp(encoded_secret) do
-    timestamp = System.system_time(:seconds)
-    totp(encoded_secret, timestamp)
-  end
-
-  @doc """
-  Create TOTP with raw secret and current timestamp.
-  """
-  @spec totp(String.t, Keyword.t) :: String.t
-  def totp(raw_secret, encoded_secret: false) do
-    encoded_secret = Base.encode32(raw_secret, padding: false)
-    totp(encoded_secret)
-  end
-
-  @doc """
-  Create TOTP with base32 encoded secret and timestamp.
-  """
-  @spec totp(String.t, integer) :: String.t
-  def totp(encoded_secret, timestamp) do
-    counter = get_counter_from_timestamp(timestamp, @default_timestep)
+  @spec totp(secret :: String.t, opts :: Keyword.t) :: String.t
+  def totp(secret, opts \\ []) do
+    encoded_secret = get_encoded_secret(secret, opts)
+    timestamp = get_timestamp(opts)
+    counter = get_counter_from_timestamp(timestamp)
     hotp(encoded_secret, counter)
-  end
-
-  @doc """
-  Create TOTP with raw secret and timestamp.
-  """
-  @spec totp(String.t, integer, Keyword.t) :: String.t
-  def totp(raw_secret, timestamp, encoded_secret: false) do
-    encoded_secret = Base.encode32(raw_secret, padding: false)
-    totp(encoded_secret, timestamp)
   end
 
   # totp validation
   @doc """
-  Validate TOTP with token, base32 encoded secret and current timestamp.
+  Validate TOTP with secret.
+
+  * opts
+   * `encoded_secret: false` : secret is not base32 encoded.
+   * `timestamp` : timestamp, default is current timestamp
   """
-  @spec valid_totp(String.t, String.t) :: boolean
-  def valid_totp(token, encoded_secret) do
-    timestamp = System.system_time(:seconds)
-    counter = get_counter_from_timestamp(timestamp, @default_timestep)
+  @spec valid_totp(token :: String.t, secret :: String.t, opts :: Keyword.t) :: boolean
+  def valid_totp(token, secret, opts \\ []) do
+    encoded_secret = get_encoded_secret(secret, opts)
+    timestamp = get_timestamp(opts)
+    counter = get_counter_from_timestamp(timestamp)
     valid_hotp(token, encoded_secret, counter)
   end
 
-  @doc """
-  Validate TOTP with token, raw secret and current timestamp.
-  """
-  @spec valid_totp(String.t, String.t, Keyword.t) :: boolean
-  def valid_totp(token, raw_secret, encoded_secret: false) do
-    encoded_secret = Base.encode32(raw_secret, padding: false)
-    valid_totp(token, encoded_secret)
+  defp get_encoded_secret(secret, opts) do
+    case opts |> Keyword.get(:encoded_secret) do
+      false ->
+        Base.encode32(secret, padding: false)
+      _ -> secret
+    end
   end
 
-  @doc """
-  Validate TOTP with token, base32 encoded secret and timestamp.
-  """
-  @spec valid_totp(String.t, String.t, integer) :: boolean
-  def valid_totp(token, encoded_secret, timestamp) do
-    counter = get_counter_from_timestamp(timestamp, @default_timestep)
-    valid_hotp(token, encoded_secret, counter)
+  defp get_timestamp(opts) do
+    if opts |> Keyword.get(:timestamp) do
+      opts |> Keyword.get(:timestamp)
+    else
+      timestamp = System.system_time(:seconds)
+    end
   end
 
-  @doc """
-  Validate TOTP with token, raw secret and timestamp.
-  """
-  @spec valid_totp(String.t, String.t, integer, Keyword.t) :: boolean
-  def valid_totp(token, raw_secret, timestamp, encoded_secret: false) do
-    encoded_secret = Base.encode32(raw_secret, padding: false)
-    valid_totp(token, encoded_secret, timestamp)
-  end
-
-  defp get_counter_from_timestamp(timestamp, timestep) do
-    trunc(timestamp / timestep)
+  defp get_counter_from_timestamp(timestamp) do
+    trunc(timestamp / @default_timestep)
   end
 end

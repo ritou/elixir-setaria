@@ -118,7 +118,7 @@ defmodule Setaria do
     if opts |> Keyword.get(:timestamp) do
       opts |> Keyword.get(:timestamp)
     else
-      timestamp = System.system_time(:seconds)
+      System.system_time(:seconds)
     end
   end
 

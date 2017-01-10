@@ -7,6 +7,43 @@ defmodule Setaria do
   This is wrapper of [POT](https://hex.pm/packages/pot).
 
   NOTE: Some parameters are fixed now. The timestep is 30, digits is 6, and digest method is sha.
+
+  ```elixir
+
+  # hotp creation
+  hotp_with_encoded_secret = Setaria.hotp(encoded_secret, counter)
+  hotp_with_raw_secret = Setaria.hotp(secret, counter, [encoded_secret: false])
+
+  # hotp validation
+  #  with encoded secret
+  if Setaria.valid_hotp(token, encoded_secret, counter) do
+    # ...
+  end
+
+  #  with raw secret
+  if Setaria.valid_hotp(token, secret, counter, [encoded_secret: false]) do
+    # ...
+  end
+
+  # totp creation
+  totp_with_encoded_secret = Setaria.totp(encoded_secret)
+  totp_with_raw_secret = Setaria.totp(secret, [encoded_secret: false])
+  totp_with_raw_secret_and_manual_timestamp = Setaria.totp(secret, [timestamp: timestamp + 30, encoded_secret: false])
+
+  # totp validation
+  if Setaria.valid_totp(token, encoded_secret) do
+    # ...
+  end
+
+  if Setaria.valid_totp(token, secret, [encoded_secret: false]) do
+    # ...
+  end
+
+  if Setaria.valid_totp(token, secret, [timestamp: timestamp + 30, encoded_secret: false]) do
+    # ...
+  end
+
+  ```
   """
 
   @default_timestep 30

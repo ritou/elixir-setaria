@@ -71,7 +71,7 @@ defmodule Setaria do
   @spec valid_hotp(token :: String.t, secret :: String.t, counter :: Integer.t, opts :: Keyword.t) :: boolean
   def valid_hotp(token, secret, counter, opts \\ []) do
     encoded_secret = get_encoded_secret(secret, opts)
-    :pot.valid_hotp(token, encoded_secret, [{:last, counter - 1}]) == counter
+    :pot.valid_hotp(token, encoded_secret, [{:last, counter - 1}])
   end
 
   # totp creation

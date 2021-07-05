@@ -1,4 +1,4 @@
-# Setaria
+# Setaria [![GitHub Actions Test][test-img]][test] [![GitHub Actions CI][ci-img]][ci]
 
 [test]: https://github.com/ritou/elixir-setaria
 [test-img]: https://github.com/ritou/elixir-setaria/workflows/test/badge.svg

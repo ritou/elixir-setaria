@@ -20,7 +20,7 @@ defmodule Setaria.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger]]
+    [applications: [:logger, :pot]]
   end
 
   # Dependencies can be Hex packages:
@@ -34,7 +34,7 @@ defmodule Setaria.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:pot, "~>0.9.5"},
+      {:pot, "~> 1.0"},
       {:ex_doc, "~> 0.10", only: :dev}
     ]
   end

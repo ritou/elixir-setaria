@@ -1,9 +1,7 @@
-# Setaria [![GitHub Actions Test][test-img]][test] [![GitHub Actions CI][ci-img]][ci]
+# Setaria [![GitHub Actions CI][ci-img]][ci]
 
-[test]: https://github.com/ritou/elixir-setaria
-[test-img]: https://github.com/ritou/elixir-setaria/workflows/test/badge.svg
 [ci]: https://github.com/ritou/elixir-setaria
-[ci-img]: https://github.com/ritou/elixir-setaria/workflows/ci/badge.svg
+[ci-img]: https://github.com/ritou/elixir-setaria/actions/workflows/ci.yml/badge.svg
 
 Setaria is OATH One Time Passwords Library for Elixir.
 This is wrapper of [POT](https://hex.pm/packages/pot).

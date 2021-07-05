@@ -14,7 +14,7 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 
     ```elixir
     def deps do
-      [{:setaria, "~> 0.2.0"}]
+      [{:setaria, "~> 0.3.0"}]
     end
     ```
 

@@ -16,12 +16,12 @@ defmodule Setaria do
 
   # hotp validation
   #  with encoded secret
-  if Setaria.valid_hotp(token, encoded_secret, counter) do
+  if Setaria.valid_hotp?(token, encoded_secret, counter) do
     # ...
   end
 
   #  with raw secret
-  if Setaria.valid_hotp(token, secret, counter, [encoded_secret: false]) do
+  if Setaria.valid_hotp?(token, secret, counter, [encoded_secret: false]) do
     # ...
   end
 
@@ -31,15 +31,15 @@ defmodule Setaria do
   totp_with_raw_secret_and_manual_timestamp = Setaria.totp(secret, [timestamp: timestamp + 30, encoded_secret: false])
 
   # totp validation
-  if Setaria.valid_totp(token, encoded_secret) do
+  if Setaria.valid_totp?(token, encoded_secret) do
     # ...
   end
 
-  if Setaria.valid_totp(token, secret, [encoded_secret: false]) do
+  if Setaria.valid_totp?(token, secret, [encoded_secret: false]) do
     # ...
   end
 
-  if Setaria.valid_totp(token, secret, [timestamp: timestamp + 30, encoded_secret: false]) do
+  if Setaria.valid_totp?(token, secret, [timestamp: timestamp + 30, encoded_secret: false]) do
     # ...
   end
 
@@ -55,7 +55,7 @@ defmodule Setaria do
   * opts
    * `encoded_secret: false` : secret is not base32 encoded.
   """
-  @spec hotp(secret :: String.t, counter :: Integer.t, opts :: Keyword.t) :: String.t
+  @spec hotp(secret :: String.t(), counter :: Integer.t(), opts :: Keyword.t()) :: String.t()
   def hotp(secret, counter, opts \\ []) do
     encoded_secret = get_encoded_secret(secret, opts)
     :pot.hotp(encoded_secret, counter)
@@ -68,8 +68,13 @@ defmodule Setaria do
   * opts
    * `encoded_secret: false` : secret is not base32 encoded.
   """
-  @spec valid_hotp(token :: String.t, secret :: String.t, counter :: Integer.t, opts :: Keyword.t) :: boolean
-  def valid_hotp(token, secret, counter, opts \\ []) do
+  @spec valid_hotp?(
+          token :: String.t(),
+          secret :: String.t(),
+          counter :: Integer.t(),
+          opts :: Keyword.t()
+        ) :: boolean
+  def valid_hotp?(token, secret, counter, opts \\ []) do
     encoded_secret = get_encoded_secret(secret, opts)
     :pot.valid_hotp(token, encoded_secret, [{:last, counter - 1}])
   end
@@ -82,7 +87,7 @@ defmodule Setaria do
    * `encoded_secret: false` : secret is not base32 encoded.
    * `timestamp` : timestamp
   """
-  @spec totp(secret :: String.t, opts :: Keyword.t) :: String.t
+  @spec totp(secret :: String.t(), opts :: Keyword.t()) :: String.t()
   def totp(secret, opts \\ []) do
     encoded_secret = get_encoded_secret(secret, opts)
     timestamp = get_timestamp(opts)
@@ -98,19 +103,21 @@ defmodule Setaria do
    * `encoded_secret: false` : secret is not base32 encoded.
    * `timestamp` : timestamp, default is current timestamp
   """
-  @spec valid_totp(token :: String.t, secret :: String.t, opts :: Keyword.t) :: boolean
-  def valid_totp(token, secret, opts \\ []) do
+  @spec valid_totp?(token :: String.t(), secret :: String.t(), opts :: Keyword.t()) :: boolean
+  def valid_totp?(token, secret, opts \\ []) do
     encoded_secret = get_encoded_secret(secret, opts)
     timestamp = get_timestamp(opts)
     counter = get_counter_from_timestamp(timestamp)
-    valid_hotp(token, encoded_secret, counter)
+    valid_hotp?(token, encoded_secret, counter)
   end
 
   defp get_encoded_secret(secret, opts) do
     case opts |> Keyword.get(:encoded_secret) do
       false ->
         Base.encode32(secret, padding: false)
-      _ -> secret
+
+      _ ->
+        secret
     end
   end
 

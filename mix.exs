@@ -3,7 +3,7 @@ defmodule Setaria.Mixfile do
 
   def project do
     [app: :setaria,
-     version: "0.3.0",
+     version: "1.0.0",
      elixir: "~> 1.4",
      # build_embedded: Mix.env == :prod,
      # start_permanent: Mix.env == :prod,
@@ -35,7 +35,7 @@ defmodule Setaria.Mixfile do
   defp deps do
     [
       {:pot, "~> 1.0"},
-      {:ex_doc, "~> 0.10", only: :dev}
+      {:ex_doc, "~> 0.19", only: :dev}
     ]
   end
 end

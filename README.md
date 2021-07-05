@@ -1,6 +1,9 @@
 # Setaria
 
-[![Build Status](https://travis-ci.org/ritou/elixir-setaria.svg?branch=master)](https://travis-ci.org/ritou/elixir-setaria)
+[test]: https://github.com/ritou/elixir-setaria
+[test-img]: https://github.com/ritou/elixir-setaria/workflows/test/badge.svg
+[ci]: https://github.com/ritou/elixir-setaria
+[ci-img]: https://github.com/ritou/elixir-setaria/workflows/ci/badge.svg
 
 Setaria is OATH One Time Passwords Library for Elixir.
 This is wrapper of [POT](https://hex.pm/packages/pot).

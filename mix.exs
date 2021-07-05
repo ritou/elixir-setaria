@@ -35,7 +35,7 @@ defmodule Setaria.Mixfile do
   defp deps do
     [
       {:pot, "~> 1.0"},
-      {:ex_doc, "~> 0.10", only: :dev}
+      {:ex_doc, "~> 0.19", only: :dev}
     ]
   end
 end
